@@ -37,7 +37,7 @@ function normalizePort(val) {
   var port = parseInt(val, 10);
 
   if (isNaN(port)) {
-    console.log(
+    console.info(
       "Port is not a number, so it is not being used. Please check the port number in the server/bin/www file."
     );
     return val;
