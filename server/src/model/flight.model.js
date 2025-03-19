@@ -1,78 +1,70 @@
-const mongoose = require("mongoose");
+const { Model, DataTypes } = require("sequelize");
+const { sequelize } = require("../config/db/connectPostgres");
 
-const flightSchema = new mongoose.Schema(
+class Flight extends Model {}
+
+Flight.init(
   {
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
     flightName: {
-      type: String,
-      required: true,
-      trim: true,
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     flightNumber: {
-      type: String,
-      required: true,
-      trim: true,
-      unique: true,
+      type: DataTypes.STRING,
+      allowNull: false,
     },
-    passenger_info: [
-      {
-        name: "String",
-        age: "Number",
-        gender: "String",
-        seat: "String",
-      },
-    ],
+    passenger_info: {
+      type: DataTypes.ARRAY(DataTypes.JSONB),
+      allowNull: false,
+    },
     airline: {
-      type: String,
-      required: true,
-      trim: true,
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     from: {
-      type: String,
-      required: true,
-      trim: true,
-      uppercase: true,
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     to: {
-      type: String,
-      required: true,
-      trim: true,
-      uppercase: true,
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     departure: {
-      type: Date,
-      required: true,
+      type: DataTypes.DATE,
+      allowNull: false,
     },
     arrival: {
-      type: Date,
-      required: true,
+      type: DataTypes.DATE,
+      allowNull: false,
     },
     duration: {
-      type: Number,
-      required: true,
-      min: 0,
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     bookedseat: {
-      type: Number,
-      required: true,
-      min: 0,
+      type: DataTypes.INTEGER,
+      allowNull: false,
     },
     price: {
-      type: Number,
-      required: true,
-      min: 0,
+      type: DataTypes.INTEGER,
+      allowNull: false,
     },
-    payment: [
-      {
-        method: String,
-        status: String,
-        amount: Number,
-        currency: String,
-        date: Date,
-      },
-    ],
+    payment: {
+      type: DataTypes.ARRAY(DataTypes.JSONB),
+      allowNull: false,
+    },
   },
-  { timestamps: true }
+  {
+    sequelize,
+    modelName: "flight",
+    createdAt: "created_at",
+    updatedAt: "updated_at",
+  }
 );
 
-const Flight = mongoose.model("Flight", flightSchema);
 module.exports = Flight;
