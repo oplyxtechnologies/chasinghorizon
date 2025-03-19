@@ -13,14 +13,14 @@ function createRateLimiter(time, maxRequests, message, retryAfter) {
   });
 }
 
-var loginLimiter = createRateLimiter(
+const loginLimiter = createRateLimiter(
   0.5 * 60 * 1000,
   5,
   "Too many login attempts, please try again later.",
   15
 );
 
-var defaultLimiter = createRateLimiter(
+const defaultLimiter = createRateLimiter(
   0.2 * 60 * 1000,
   10,
   "You are making too many requests.",

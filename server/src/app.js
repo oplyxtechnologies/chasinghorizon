@@ -1,19 +1,27 @@
-var createError = require("http-errors");
-var express = require("express");
-var path = require("path");
-var cookieParser = require("cookie-parser");
-var logger = require("morgan");
+const createError = require("http-errors");
+const express = require("express");
+const path = require("path");
+const cookieParser = require("cookie-parser");
+const logger = require("morgan");
+const cors = require("cors");
 
-var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
-var connectMongo = require("./config/db/connectMongoose");
-var { defaultLimiter } = require("./middleware/express-limit/express-limit");
+const indexRouter = require("./routes/index");
+const userRouter = require("./routes/auth.route");
+const connectMongo = require("./config/db/connectMongoose");
+const {
+  defaultLimiter,
+  loginLimiter,
+} = require("./middleware/express-limit/express-limit");
 const errorHandler = require("./middleware/error/errorHandler");
+const { connectPostgres } = require("./config/db/connectPostgres");
+const { connectRedis } = require("./config/db/connectRedis");
+const { CORS_ORIGIN } = require("./config/env");
 
-var app = express();
+const app = express();
 
 connectMongo();
-errorHandler();
+connectPostgres();
+connectRedis();
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
@@ -28,24 +36,32 @@ app.get("/version", (req, res) => {
 
 app.use(logger("dev"));
 app.use(express.json());
+app.use(
+  cors({
+    origin: CORS_ORIGIN,
+    credentials: true,
+  })
+);
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", defaultLimiter, indexRouter);
-app.use("/users", usersRouter);
+app.use("/users", loginLimiter, userRouter);
 
 app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function (err, req, res, next) {
-  res.locals.message = err.message;
-  res.locals.error = req.app.get("env") === "development" ? err : {};
+// app.use(function (err, req, res, next) {
+//   res.locals.message = err.message;
+//   res.locals.error = req.app.get("env") === "development" ? err : {};
 
-  res.status(err.status || 500);
-  res.render("error");
-});
+//   res.status(err.status || 500);
+//   res.render("error");
+// });
+
+app.use(errorHandler);
 
 module.exports = app;

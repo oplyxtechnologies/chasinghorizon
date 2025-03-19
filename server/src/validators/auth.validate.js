@@ -1,6 +1,6 @@
-var Joi = require("joi");
+const Joi = require("joi");
 
-var userSchema = Joi.object({
+const userSchema = Joi.object({
   fullName: Joi.string().required(),
   email: Joi.string().email().required(),
   phoneNumber: Joi.string().required(),

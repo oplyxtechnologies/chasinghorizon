@@ -1,9 +1,9 @@
-var { default: mongoose } = require("mongoose");
+const { default: mongoose } = require("mongoose");
 
-var userSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
   fullName: {
     type: String,
-    required: [true, "Username is required"],
+    required: [true, "Fullname is required"],
   },
   email: {
     type: String,
@@ -29,5 +29,5 @@ var userSchema = new mongoose.Schema({
   },
 });
 
-var User = mongoose.model("User", userSchema);
+const User = mongoose.model("User", userSchema);
 module.exports = User;
