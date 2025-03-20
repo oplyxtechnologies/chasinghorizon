@@ -17,24 +17,26 @@ Chasing Horizon is a tour and travel website designed to provide seamless travel
 
 ```sh
 # Clone the repository
-git clone https://github.com/your-username/chasing-horizon.git
+git clone https://github.com/oplyxtechnologies/chasinghorizon.git
 
 # Navigate to the project directory
-cd chasing-horizon
+cd server
 
 # Install dependencies
 npm install
 
-# Start the development server
+# Start the node development server
 npm start
+
+# Start the nodemon server
+npm run dev
 ```
 
 ## Tech Stack
 
-- **Frontend:** React, Tailwind CSS
 - **Backend:** Node.js, Express.js
-- **Database:** MongoDB
-- **Authentication:** JWT
+- **Database:** MongoDB, PostgreSQL, Redis
+- **Authentication:** JWT , Bcrypt
 
 ## License
 
@@ -42,4 +44,6 @@ This project is licensed under the MIT License. See `LICENSE` for more details.
 
 ## Contact
 
-For inquiries, reach out to us at [your-email@example.com](mailto:your-email@example.com).
+This project is carried out by [Oplyx Technologies](oplyx.tech)
+
+For inquiries, reach out to us at [oplyxtechnologies@gmail.com](mailto:oplyxtechnologies@gmail.com).
