@@ -44,6 +44,6 @@ This project is licensed under the MIT License. See `LICENSE` for more details.
 
 ## Contact
 
-This project is carried out by [Oplyx Technologies](oplyx.tech)
+This project is carried out by [Oplyx Technologies](https://www.oplyx.tech)
 
 For inquiries, reach out to us at [oplyxtechnologies@gmail.com](mailto:oplyxtechnologies@gmail.com).
