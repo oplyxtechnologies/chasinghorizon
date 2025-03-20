@@ -1,8 +1,16 @@
-# Chasing Horizon
+# Chasing Horizon Servers
 
 ## Overview
 
 Chasing Horizon is a tour and travel website designed to provide seamless travel experiences. From booking flights and accommodations to exploring new destinations, Chasing Horizon offers an all-in-one solution for travelers.
+
+Use .env.example as a reference to .env.
+
+## Admin Registration
+
+After you provide a ADMIN*MAIL in .env a admin will be registered automatically.
+Credentials would contain the \_email* you provided in **ADMIN_MAIL** and _password_ would be **chasinghorizon**
+Please update the password after registration and login
 
 ## Features
 
