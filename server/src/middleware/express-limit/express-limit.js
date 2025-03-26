@@ -14,7 +14,7 @@ function createRateLimiter(time, maxRequests, message, retryAfter) {
 }
 
 const loginLimiter = createRateLimiter(
-  0.5 * 60 * 1000,
+  0.5 * 30 * 1000,
   5,
   "Too many login attempts, please try again later.",
   15

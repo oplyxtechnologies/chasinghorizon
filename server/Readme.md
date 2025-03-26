@@ -8,8 +8,8 @@ Use .env.example as a reference to .env.
 
 ## Admin Registration
 
-After you provide a ADMIN*MAIL in .env a admin will be registered automatically.
-Credentials would contain the \_email* you provided in **ADMIN_MAIL** and _password_ would be **chasinghorizon**
+After you provide a ADMINMAIL in .env a admin will be registered automatically.
+Credentials would contain the \_email\* you provided in **ADMIN_MAIL** and _password_ would be **chasinghorizon**
 Please update the password after registration and login
 
 ## Features

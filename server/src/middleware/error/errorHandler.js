@@ -4,6 +4,7 @@ function errorHandler(err, req, res, next) {
   if (
     err.message === "Email already exists" ||
     err.message === "Email is required" ||
+    err.message === "User already exists" ||
     err.message === "Phone number already exists" ||
     err.message === "Phone number is required" ||
     err.message === "Password is required" ||

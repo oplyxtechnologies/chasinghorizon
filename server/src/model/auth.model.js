@@ -1,33 +1,52 @@
-const { default: mongoose } = require("mongoose");
+const { Model, DataTypes } = require("sequelize");
+const { sequelize } = require("../config/db/connectPostgres");
 
-const userSchema = new mongoose.Schema({
-  fullName: {
-    type: String,
-    required: [true, "Fullname is required"],
-  },
-  email: {
-    type: String,
-    required: [true, "Email is required"],
-    unique: [true, "Email already exists"],
-  },
-  phoneNumber: {
-    type: String,
-    required: [true, "Phone number is required"],
-    unique: [true, "Phone number already exists"],
-  },
-  password: {
-    type: String,
-    required: [true, "Password is required"],
-  },
-  role: {
-    type: String,
-    enum: ["user", "admin"],
-  },
-  isVerified: {
-    type: Boolean,
-    default: false,
-  },
-});
+class Auth extends Model {}
 
-const User = mongoose.model("User", userSchema);
-module.exports = User;
+Auth.init(
+  {
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
+    fullName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
+    role: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: "user",
+    },
+    phoneNumber: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    address: {
+      type: DataTypes.ARRAY(DataTypes.JSONB),
+      allowNull: false,
+    },
+    isVerified: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+  },
+  {
+    sequelize,
+    modelName: "Auth",
+    tableName: "Auths",
+    timestamps: true,
+  }
+);
+
+module.exports = Auth;

@@ -17,7 +17,7 @@ const flightSchema = Joi.object({
   departure: Joi.date().required(),
 
   arrival: Joi.date().required(),
-  duration: Joi.number().required(),
+  duration: Joi.string().required(),
   bookedseat: Joi.number().required(),
   price: Joi.number().required(),
   payment: Joi.array().items(

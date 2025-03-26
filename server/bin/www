@@ -25,7 +25,9 @@ const server = http.createServer(app);
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port);
+server.listen(port, () => {
+  console.info(`🤖 : Server running on port ${port}`);
+});
 server.on("error", onError);
 server.on("listening", onListening);
 
@@ -44,7 +46,6 @@ function normalizePort(val) {
   }
 
   if (port >= 0) {
-    console.info(`🤖 : Server running on port ${port}`);
     return port;
   }
 
@@ -70,7 +71,9 @@ function onError(error) {
       break;
     case "EADDRINUSE":
       console.error(bind + " is already in use");
-      process.exit(1);
+      server.listen("1234", () => {
+        console.log("🤖 : Server is running on port 1234");
+      });
       break;
     default:
       throw error;

@@ -1,0 +1,18 @@
+div(style="font-family: Arial, sans-serif; line-height: 1.6; color: #ffffff; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #1b1464; border-radius: 8px;")
+  header(style="text-align: center; margin-bottom: 20px;")
+    img(src="", alt="Chasing Horizon Logo", style="max-width: 150px; margin-bottom: 10px;")
+    p(style="color: #797979; margin: 0;") Chasing Horizon Tours and Travels
+  main
+    h2(style="color: #ffffff;") Hi #{name},
+    p(style="color: #797979;")  Thanks for registering with <strong>Chasing Horizon</strong>! We're excited to have you as part of our community, we ensure an amazing experience for each user.
+    p(style="color: #797979;") Please verify your account by clicking the button below 
+    a(href=`http://localhost:1111/users/verify?token=${verificationToken}`, style="color: #007BFF; text-decoration: none;")
+        button(style="cursor:pointer; height: 30px; color: #1b1464") Verify Account
+  footer(style="margin-top: 20px; text-align: center; color: #777;")
+    hr(style="border: none; border-top: 1px solid #444; margin: 20px 0;")
+    p(style="font-size: 14px; color: #797979;") &copy; #{new Date().getFullYear()} Chasing Horizon. All rights reserved.
+    p(style="font-size: 14px; color: #797979;") Follow us on  
+      a(href="https://facebook.com/chasingHorizon", style="color: #007BFF; text-decoration: none;") Facebook
+      |  | 
+      a(href="https://linkedIn.com/chasingHorizon", style="color: #007BFF; text-decoration: none;") Instagram
+

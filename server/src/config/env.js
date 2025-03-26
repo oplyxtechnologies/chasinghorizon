@@ -16,6 +16,8 @@ const {
   REDIS_HOST,
   REDIS_PASSWORD,
   CORS_ORIGIN,
+  ADMIN_MAIL,
+  SECRET_KEY,
 } = process.env;
 
 module.exports = {
@@ -33,4 +35,6 @@ module.exports = {
   REDIS_HOST,
   REDIS_PASSWORD,
   CORS_ORIGIN,
+  ADMIN_MAIL,
+  SECRET_KEY,
 };

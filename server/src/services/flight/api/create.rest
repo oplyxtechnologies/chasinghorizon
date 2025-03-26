@@ -1,0 +1,38 @@
+POST http://localhost:1111/flights/
+
+Content-Type: application/json
+
+{
+    "flightName": "SkyJet Airways",
+    "flightNumber": "SJ102",
+    "passenger_info": [
+      {
+        "name": "Laxmi Prasad",
+        "age": 30,
+        "passportNumber": "A12345678"
+      },
+      {
+        "name": "Hari Prasad",
+        "age": 28,
+        "passportNumber": "B87654321"
+      }
+    ],
+    "airline": "Buddha Airlines",
+    "from": "Kathmandu (KTM)",
+    "to": "Pokhara (PKR)",
+    "departure": "2024-04-15T10:00:00Z",
+    "arrival": "2024-04-15T14:00:00Z",
+    "duration": "4h 0m",
+    "bookedseat": 150,
+    "price": 299,
+    "payment": [
+      {
+        "paymentMethod": "Credit Card",
+        "transactionId": "TXN123456789"
+      },
+      {
+        "paymentMethod": "Khalti",
+        "transactionId": "TXN987654321"
+      }
+    ]
+}

@@ -1,0 +1,14 @@
+{
+  "fullName": "Aaryan Sharma",
+  "email": "lazyfox916@gmail.com",
+  "phoneNumber": "9761637657",
+  "password": "aaryan@10",
+  "address": [
+    {
+      "country": "Nepal",
+      "city": "Kathmandu",
+      "street": "Kapan",
+      "zip": "11011"
+    }
+  ]
+}

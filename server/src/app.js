@@ -7,6 +7,7 @@ const cors = require("cors");
 
 const indexRouter = require("./routes/index");
 const userRouter = require("./routes/auth.route");
+const flightRouter = require("./routes/flight.route");
 const connectMongo = require("./config/db/connectMongoose");
 const {
   defaultLimiter,
@@ -16,12 +17,16 @@ const errorHandler = require("./middleware/error/errorHandler");
 const { connectPostgres } = require("./config/db/connectPostgres");
 const { connectRedis } = require("./config/db/connectRedis");
 const { CORS_ORIGIN } = require("./config/env");
+const { createAdmin } = require("./utils/createInitialAdmin");
+const { getAllUserService } = require("./services/auth/auth.service");
 
 const app = express();
 
 connectMongo();
 connectPostgres();
 connectRedis();
+
+// createAdmin();
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
@@ -30,12 +35,17 @@ app.get("/health", (req, res) => {
   res.send("Server is working fine");
 });
 
+app.get("/test", (req, res) => {
+  res.render("test");
+});
+
 app.get("/version", (req, res) => {
   res.send("Chasing Horizon Version 1.0.0");
 });
 
 app.use(logger("dev"));
 app.use(express.json());
+app.options("*", cors());
 app.use(
   cors({
     origin: CORS_ORIGIN,
@@ -47,7 +57,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", defaultLimiter, indexRouter);
-app.use("/users", loginLimiter, userRouter);
+app.use("/users", userRouter);
+app.use("/flights", defaultLimiter, flightRouter);
 
 app.use(function (req, res, next) {
   next(createError(404));

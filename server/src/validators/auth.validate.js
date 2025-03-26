@@ -5,6 +5,15 @@ const userSchema = Joi.object({
   email: Joi.string().email().required(),
   phoneNumber: Joi.string().required(),
   password: Joi.string().required(),
+  role: Joi.string(),
+  address: Joi.array().items(
+    Joi.object({
+      country: Joi.string().required(),
+      city: Joi.string().required(),
+      street: Joi.string().required(),
+      zip: Joi.string().required(),
+    }).required()
+  ),
 });
 
 function validateUser(req, res, next) {
