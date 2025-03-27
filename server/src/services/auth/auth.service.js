@@ -1,4 +1,5 @@
 const { redis } = require("../../config/db/connectRedis");
+const { ADMIN_MAIL } = require("../../config/env");
 const Auth = require("../../model/auth.model");
 
 async function createUser({ fullName, email, phoneNumber, password, address }) {
@@ -8,7 +9,7 @@ async function createUser({ fullName, email, phoneNumber, password, address }) {
     throw new Error("User already exists");
   }
 
-  // await redis.del("allUsers");
+  await redis.del("allUsers");
 
   const result = await Auth.create({
     fullName,
@@ -47,11 +48,63 @@ async function getAllUserService() {
   return result;
 }
 
+async function initialAdminService({
+  fullName,
+  email,
+  phoneNumber,
+  role,
+  password,
+  isVerified,
+  address,
+}) {
+  if (!email) {
+    return;
+  }
+  const existUser = await Auth.findOne({ where: { email } });
+  if (existUser) {
+    return;
+  }
+  const admin = await Auth.create({
+    fullName,
+    email,
+    phoneNumber,
+    password,
+    role,
+    isVerified,
+    address,
+  });
+  console.log(`Initial admin created with the mail from .env`);
+  return admin;
+}
+
+async function createAdminService({
+  fullName,
+  email,
+  phoneNumber,
+  password,
+  role,
+  isVerified,
+  address,
+}) {
+  const result = await Auth.create({
+    fullName,
+    email,
+    phoneNumber,
+    password,
+    role,
+    isVerified,
+    address,
+  });
+  return result;
+}
+
 module.exports = {
   createUser,
   verifyUser,
   loginUserService,
   getAllUserService,
+  initialAdminService,
+  createAdminService,
 };
 
 //model

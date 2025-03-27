@@ -6,6 +6,7 @@ const {
   verifyUser,
   loginUserService,
   getAllUserService,
+  createAdminService,
 } = require("../services/auth/auth.service");
 
 exports.signUpController = async (req, res, next) => {
@@ -17,33 +18,67 @@ exports.signUpController = async (req, res, next) => {
   };
   try {
     const user = await createUser(data);
-    const verificationToken = await createjwtToken(user.id, "1d");
-    signupmail({
-      receiver: user.email,
-      username: user.fullName,
-      verificationToken: verificationToken,
-    });
+    const verificationToken = await createjwtToken(user.id, "1h");
+    if (!verificationToken) {
+      return next(error);
+    }
+    try {
+      await signupmail({
+        receiver: user.email,
+        username: user.fullName,
+        verificationToken: verificationToken,
+      });
+    } catch (mailError) {
+      next(mailError);
+    }
     res.status(200).json({
       success: true,
       data: user,
       message: `Verification mail sent to ${user.email}`,
     });
   } catch (error) {
-    next(error);
+    next(500, error.message);
   }
 };
 
 exports.verifyController = async (req, res, next) => {
   const token = req.query.token;
+
+  if (!token) {
+    const error = new Error("Token is missing");
+    error.status = 400;
+    return next(error);
+  }
   try {
     const verifyToken = await verifyjwtToken(token);
+    if (!verifyToken) {
+      const error = new Error("Invalid Token");
+      error.status = 400;
+      return next(error);
+    }
     const result = await verifyUser({ id: verifyToken.id });
     res.status(200).json({
       success: true,
       message: "User registered successfully",
       data: result,
     });
-  } catch (error) {}
+  } catch (error) {
+    if (error.name === "TokenExpiredError") {
+      const error = new Error("Token has expired");
+      error.status = 400;
+      return next(error);
+    }
+    if (
+      error.message === "invalid signature" ||
+      error.message === "jwt malformed"
+    ) {
+      const error = new Error("Invalid Token");
+      error.status = 403;
+      return next(error);
+    }
+
+    next(error);
+  }
 };
 
 exports.loginController = async (req, res, next) => {
@@ -74,10 +109,7 @@ exports.loginController = async (req, res, next) => {
       token: token,
     });
   } catch (error) {
-    next({
-      status: 500,
-      message: error.message,
-    });
+    next(500, error.message);
   }
 };
 
@@ -90,9 +122,42 @@ exports.getAllUsersController = async (req, res, next) => {
       users,
     });
   } catch (error) {
-    next({
-      status: 500,
-      message: error.message,
-    });
+    next(500, error.message);
   }
+};
+
+exports.createAdminController = async (req, res, next) => {
+  let data = req.body;
+  const hashedPassword = hashPassword(data.password);
+  data = {
+    ...data,
+    password: hashedPassword,
+    role: "admin",
+    isVerified: true,
+  };
+  try {
+    const result = await createAdminService(data);
+    res.status(201).json({
+      success: true,
+      message: "Admin created successfully",
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.updateUserController = async (req, res, next) => {
+  const id = req._id;
+  const data = req.body;
+  ["email", "password", "isVerified", "role"].forEach(
+    (field) => delete data[field]
+  );
+  try {
+    if (Object.keys(data).length === 0) {
+      const error = "No valid fields to update";
+      error.status = 400;
+      return next(error);
+    }
+  } catch (error) {}
 };
