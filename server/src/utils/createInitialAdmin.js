@@ -1,13 +1,18 @@
 const { ADMIN_MAIL } = require("../config/env");
-const { createUser } = require("../services/auth/auth.service");
+const { hashPassword } = require("../lib/bcrypt/bcrypt");
+const {
+  createUser,
+  initialAdminService,
+} = require("../services/auth/auth.service");
 
-exports.createAdmin = () => {
-  const data = {
-    fullName: "Oplyx Tech",
+exports.createAdmin = async () => {
+  let data = {
+    fullName: "ADMIN",
     email: ADMIN_MAIL,
     phoneNumber: 976167657,
     password: "chasinghorizon",
     role: "admin",
+    isVerified: true,
     address: [
       {
         country: "Nepal",
@@ -17,9 +22,13 @@ exports.createAdmin = () => {
       },
     ],
   };
+  const hashedPassword = await hashPassword(data.password);
+  data = {
+    ...data,
+    password: hashedPassword,
+  };
   try {
-    const result = createUser(data);
-    console.info(`Initial admin created...`);
+    const result = initialAdminService(data);
   } catch (error) {
     console.log("");
   }
