@@ -1,24 +1,23 @@
+"use strict";
+
 const createError = require("http-errors");
 const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
+require("./lib/cron/cron-node");
 
 const indexRouter = require("./routes/index");
 const userRouter = require("./routes/auth.route");
 const flightRouter = require("./routes/flight.route");
 const connectMongo = require("./config/db/connectMongoose");
-const {
-  defaultLimiter,
-  loginLimiter,
-} = require("./middleware/express-limit/express-limit");
+const { defaultLimiter } = require("./middleware/express-limit/express-limit");
 const errorHandler = require("./middleware/error/errorHandler");
 const { connectPostgres } = require("./config/db/connectPostgres");
 const { connectRedis } = require("./config/db/connectRedis");
 const { CORS_ORIGIN } = require("./config/env");
 const { createAdmin } = require("./utils/createInitialAdmin");
-const { getAllUserService } = require("./services/auth/auth.service");
 
 const app = express();
 
@@ -26,7 +25,7 @@ connectMongo();
 connectPostgres();
 connectRedis();
 
-// createAdmin();
+createAdmin();
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");

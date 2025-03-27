@@ -18,7 +18,7 @@ async function signupmail({ receiver, username, verificationToken }) {
       html: htmlContent,
     });
   } catch (error) {
-    throw new Error("Failed to send verification email: " + error.message);
+    next(error);
   }
 }
 
