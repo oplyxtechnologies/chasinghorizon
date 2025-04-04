@@ -1,5 +1,9 @@
 const { hashPassword, comparePassword } = require("../lib/bcrypt/bcrypt");
-const { signupmail } = require("../lib/mail/Mail");
+const {
+  signupmail,
+  forgotpasswordmail,
+  resetpasswordmail,
+} = require("../lib/mail/Mail");
 const { createjwtToken, verifyjwtToken } = require("../lib/token/jwt");
 const {
   createUser,
@@ -7,7 +11,12 @@ const {
   loginUserService,
   getAllUserService,
   createAdminService,
+  forgotPasswordService,
+  saveOtpService,
+  resetPasswordService,
+  changePasswordService,
 } = require("../services/auth/auth.service");
+const generateOTP = require("../utils/generateOTP");
 
 exports.signUpController = async (req, res, next) => {
   let data = req.body;
@@ -20,6 +29,8 @@ exports.signUpController = async (req, res, next) => {
     const user = await createUser(data);
     const verificationToken = await createjwtToken(user.id, "1h");
     if (!verificationToken) {
+      const error = "Error generating token";
+      error.status = 403;
       return next(error);
     }
     try {
@@ -37,7 +48,7 @@ exports.signUpController = async (req, res, next) => {
       message: `Verification mail sent to ${user.email}`,
     });
   } catch (error) {
-    next(500, error.message);
+    next(error);
   }
 };
 
@@ -87,7 +98,7 @@ exports.loginController = async (req, res, next) => {
     const user = await loginUserService(email);
 
     !user
-      ? next({ status: 404, message: "Invalid Credentials" })
+      ? next({ status: 400, message: "Invalid Credentials" })
       : !user.isVerified
       ? next({ status: 400, message: "Please verify your account" })
       : null;
@@ -98,7 +109,7 @@ exports.loginController = async (req, res, next) => {
     });
 
     !validPassword
-      ? next({ status: 404, message: "Invalid Credentials" })
+      ? next({ status: 400, message: "Invalid Credentials" })
       : null;
 
     const token = await createjwtToken(user.id, "1d");
@@ -110,6 +121,74 @@ exports.loginController = async (req, res, next) => {
     });
   } catch (error) {
     next(500, error.message);
+  }
+};
+
+exports.forgotPasswordController = async (req, res, next) => {
+  try {
+    const result = await forgotPasswordService(req.body.email);
+    const OTP = generateOTP();
+    await saveOtpService({ userId: result.id, otp: OTP });
+    try {
+      await forgotpasswordmail({
+        receiver: result.email,
+        username: result.fullName,
+        OTP: OTP,
+      });
+    } catch (mailError) {
+      next(mailError);
+    }
+
+    res.status(200).json({
+      success: true,
+      message: `OTP sent to ${result.email}`,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.resetPasswordController = async (req, res, next) => {
+  const password = req.body.password;
+  const otp = req.query.otp;
+  try {
+    const hashedPassword = await hashPassword(password);
+    const result = await resetPasswordService({
+      otp: otp,
+      password: hashedPassword,
+    });
+    try {
+      await resetpasswordmail({
+        receiver: result.email,
+        username: result.fullName,
+      });
+    } catch (mailError) {
+      next(mailError);
+    }
+    res.status(200).json({
+      success: true,
+      message: "Password reset successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.changePasswordController = async (req, res, next) => {
+  const id = req._id;
+  const password = req.body.password;
+  const hashedPassword = await hashPassword(password);
+  try {
+    await changePasswordService({
+      password: hashedPassword,
+      id: id,
+    });
+    res.status(200).json({
+      success: true,
+      message: "Password changed successfully",
+    });
+  } catch (error) {
+    next(error);
   }
 };
 
@@ -159,5 +238,7 @@ exports.updateUserController = async (req, res, next) => {
       error.status = 400;
       return next(error);
     }
-  } catch (error) {}
+  } catch (error) {
+    next(error);
+  }
 };

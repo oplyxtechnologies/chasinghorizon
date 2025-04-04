@@ -1,0 +1,18 @@
+POST http://localhost:1111/users
+Content-Type: application/json
+
+{
+  "fullName": "Chasing Horizon",
+  "email": "aryandon81@gmail.com",
+  "phoneNumber": "9761637657",
+  "password": "chasinghorizon",
+  "address": [
+    {
+      "country": "Nepal",
+      "city": "Kathmandu",
+      "street": "Kapan",
+      "zip": "11011"
+    }
+  ]
+}
+

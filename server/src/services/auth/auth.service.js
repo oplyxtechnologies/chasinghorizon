@@ -1,6 +1,6 @@
 const { redis } = require("../../config/db/connectRedis");
-const { ADMIN_MAIL } = require("../../config/env");
 const Auth = require("../../model/auth.model");
+const OTP = require("../../model/otp.model");
 
 async function createUser({ fullName, email, phoneNumber, password, address }) {
   const existUser = await Auth.findOne({ where: { email } });
@@ -98,6 +98,83 @@ async function createAdminService({
   return result;
 }
 
+async function forgotPasswordService(email) {
+  try {
+    const user = await Auth.findOne({ where: { email } });
+    if (!user) {
+      throw new Error("Invalid Email");
+    }
+    if (!user.isVerified) {
+      throw new Error("Please verify your account first.");
+    }
+    return user;
+  } catch (error) {
+    if (
+      error.message === "Invalid Email" ||
+      error.message === "Please verify your account first."
+    ) {
+      throw error;
+    }
+    console.error("Forgot Password Service Error:", error);
+    throw new Error("Internal server error");
+  }
+}
+
+async function saveOtpService({ userId, otp }) {
+  const existOTP = await OTP.findOne({ otp: otp });
+  if (existOTP) {
+    throw new Error("Invalid OTP !");
+  }
+  return await OTP.create({
+    userId,
+    otp,
+  });
+}
+
+async function resetPasswordService({ otp, password }) {
+  try {
+    console.log(otp);
+    const validOTP = await OTP.findOne({ otp });
+
+    if (!validOTP || validOTP.status === "verified") {
+      throw new Error("Invalid OTP!");
+    }
+
+    if (validOTP.status === "expired") {
+      throw new Error("OTP expired");
+    }
+
+    await OTP.findByIdAndUpdate(validOTP._id, {
+      verified: true,
+      status: "verified",
+    });
+
+    const user = await Auth.findOne({ where: { id: validOTP.userId } });
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    await Auth.update({ password: password }, { where: { id: user.id } });
+
+    return user;
+  } catch (error) {
+    throw new Error(error.message || "Something went wrong!");
+  }
+}
+
+async function changePasswordService({ id, password }) {
+  try {
+    if (!id) {
+      throw new Error("Please provide ID");
+    }
+    return await Auth.update({ password }, { where: { id } });
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+
+module.exports = resetPasswordService;
+
 module.exports = {
   createUser,
   verifyUser,
@@ -105,10 +182,8 @@ module.exports = {
   getAllUserService,
   initialAdminService,
   createAdminService,
+  forgotPasswordService,
+  saveOtpService,
+  resetPasswordService,
+  changePasswordService,
 };
-
-//model
-//validation
-//service
-//controller
-//routes

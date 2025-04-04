@@ -1,10 +1,11 @@
 const cron = require("node-cron");
 const Auth = require("../../model/auth.model");
 const { Op } = require("sequelize");
+const OTP = require("../../model/otp.model");
 
 const deleteUnverifiedUser = async () => {
   try {
-    const result = await Auth.destroy({
+    await Auth.destroy({
       where: {
         isVerified: false,
         createdAt: {
@@ -12,12 +13,42 @@ const deleteUnverifiedUser = async () => {
         },
       },
     });
-    {
-      result > 0 ? console.log(`Deleted ${result} unverified accounts.`) : null;
-    }
   } catch (error) {
     console.error(error.message);
   }
 };
 
-cron.schedule("* * * * *", deleteUnverifiedUser);
+const expireOTP = async () => {
+  try {
+    await OTP.updateMany(
+      {
+        status: "pending",
+        createdAt: { $lt: new Date(Date.now() - 5 * 60 * 1000) },
+      },
+      {
+        $set: {
+          status: "expired",
+        },
+      }
+    );
+  } catch (error) {
+    next(error);
+  }
+};
+
+const deleteExpiredOTP = async () => {
+  try {
+    await OTP.deleteMany({
+      status: { $in: ["expired", "verified"] },
+      updatedAt: { $lt: new Date(Date.now() - 5 * 60 * 1000) },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+cron.schedule("* * * * *", () => {
+  deleteUnverifiedUser();
+  expireOTP();
+  deleteExpiredOTP();
+});

@@ -35,7 +35,7 @@ app.get("/health", (req, res) => {
 });
 
 app.get("/test", (req, res) => {
-  res.render("test");
+  res.render("hello");
 });
 
 app.get("/version", (req, res) => {

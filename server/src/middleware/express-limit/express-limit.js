@@ -27,4 +27,11 @@ const defaultLimiter = createRateLimiter(
   20
 );
 
-module.exports = { loginLimiter, defaultLimiter };
+const forgotPasswordLimiter = createRateLimiter(
+  10000,
+  1,
+  "OTP was just sent, please try again after 10 seconds.",
+  10
+);
+
+module.exports = { loginLimiter, defaultLimiter, forgotPasswordLimiter };

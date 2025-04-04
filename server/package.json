@@ -28,6 +28,7 @@
     "pug": "^3.0.3",
     "sequelize": "^6.37.6",
     "sequelize-cli": "^6.6.2",
-    "serve-favicon": "^2.5.0"
+    "serve-favicon": "^2.5.0",
+    "speakeasy": "^2.0.0"
   }
 }
