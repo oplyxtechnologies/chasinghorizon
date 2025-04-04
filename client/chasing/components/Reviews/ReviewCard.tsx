@@ -1,42 +1,20 @@
 "use client";
-
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
-const reviews = [
-  {
-    title: "A real sense of community ",
-    content:
-      "Really appreciate the help and support from the staff during these tough times. Shoutout to Katie for helping me always, even when I was…",
-    rating: 5,
-    name: "Olga",
-    location: "Weave Studios – Kai Tak",
-    source: "Google",
-    image: "/lake-mountain.jpg",
-  },
-  {
-    title: "Fantastic Living Experience",
-    content:
-      "I love the vibrant community here. The facilities are top-notch, and the support team is always ready to help. It's been a wonderful place to live and work.",
-    rating: 5,
-    name: "James",
-    location: "Weave Studios – Mong Kok",
-    source: "Google",
-    image: "/cityscape.jpg",
-  },
-  {
-    title: "Feels like home!",
-    content:
-      "From the moment I moved in, I felt welcomed. The staff goes above and beyond to make sure residents feel comfortable and cared for.",
-    rating: 5,
-    name: "Sophia",
-    location: "Weave Studios – Wan Chai",
-    source: "Google",
-    image: "/modern-apartment.jpg",
-  },
-];
+// Define the Review type
+type Review = {
+  title: string;
+  description: string;
+  rating: number;
+  author: string;
+  location: string;
+  image: string;
+  source: string;
+};
 
-const ReviewCard = ({ review }: { review: (typeof reviews)[0] }) => {
+// Review Card Component
+const ReviewCard = ({ review }: { review: Review }) => {
   return (
     <div className="relative min-w-[320px] max-w-sm flex-shrink-0">
       {/* Blue Shadow Effect */}
@@ -48,7 +26,7 @@ const ReviewCard = ({ review }: { review: (typeof reviews)[0] }) => {
         <h3 className="text-2xl font-medium">{`“${review.title}”`}</h3>
 
         {/* Review Description */}
-        <p className="text-gray-600 text-sm mt-2">{review.content}</p>
+        <p className="text-gray-600 text-sm mt-2">{review.description}</p>
 
         {/* View More Link */}
         <a href="#" className="text-sm text-gray-900 font-medium mt-2 block">
@@ -66,7 +44,7 @@ const ReviewCard = ({ review }: { review: (typeof reviews)[0] }) => {
 
         {/* Reviewer Info */}
         <div className="mt-4">
-          <p className="text-gray-900 font-semibold">{review.name}</p>
+          <p className="text-gray-900 font-semibold">{review.author}</p>
           <p className="text-gray-500 text-sm">{review.location}</p>
         </div>
 
@@ -91,7 +69,8 @@ const ReviewCard = ({ review }: { review: (typeof reviews)[0] }) => {
   );
 };
 
-const ReviewList = () => {
+// ReviewList Component that accepts reviews as props
+const ReviewList = ({ reviews }: { reviews: Review[] }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -108,7 +87,7 @@ const ReviewList = () => {
     }, 2000); // Scroll every 2 seconds
 
     return () => clearInterval(interval);
-  }, [currentIndex]);
+  }, [currentIndex, reviews.length]);
 
   return (
     <div

@@ -1,6 +1,7 @@
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { Sidebar } from "@/components/BlogPostCard/Sidebar";
+import Image from "next/image";
 
 // Define BlogPost type
 type BlogPost = {
@@ -49,9 +50,11 @@ export default function Blog() {
             key={post.id}
             className="bg-white shadow-lg rounded-lg overflow-hidden transition hover:shadow-xl"
           >
-            <img
+            <Image
               src={post.image}
               alt={post.title}
+              width={600} // Add appropriate width
+              height={400} // Add appropriate height
               className="w-full h-60 object-cover"
             />
             <div className="p-6">

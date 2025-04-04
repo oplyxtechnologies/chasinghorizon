@@ -1,13 +1,11 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 
 const Stays: React.FC = () => {
-  const [selectedTrip, setSelectedTrip] = useState<string>("round-trip");
-
   return (
     <div className="block py-2 w-full h-full">
-      <div className=" block sm:flex text-black border-2 border-gray-200 rounded-md overflow-hidden h-full">
-        <div className="flex-1 p-4 space-y-1 sm:border-r  border-gray-200">
+      <div className="block sm:flex text-black border-2 border-gray-200 rounded-md overflow-hidden h-full">
+        <div className="flex-1 p-4 space-y-1 sm:border-r border-gray-200">
           <p className="text-sm text-gray-400">City</p>
           <p className="text-xl font-black">Goa</p>
           <p className="text-sm text-gray-400">India</p>

@@ -1,5 +1,5 @@
 import OurTeam from "@/components/OurTeam/OurTeam";
-import PageHeader from "@/components/PageHeader";
+
 import Swiper from "@/components/Swiper/Swiper";
 import Image from "next/image";
 import React from "react";

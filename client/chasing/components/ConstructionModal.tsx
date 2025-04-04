@@ -22,7 +22,8 @@ const ConstructionModal = () => {
             🚧 Website Under Construction 🚧
           </h2>
           <p className="text-gray-600 mt-3">
-            We're working hard to bring you an amazing experience. Stay tuned!
+            We&apos;re working hard to bring you an amazing experience. Stay
+            tuned!
           </p>
           <button
             onClick={() => setIsOpen(false)}

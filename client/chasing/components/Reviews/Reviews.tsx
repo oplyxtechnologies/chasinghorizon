@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
-import ReviewList from "./ReviewCard";
+import ReviewList from "./ReviewCard"; // Make sure the import is correct
 
 const reviews = [
   {
@@ -57,7 +56,9 @@ const Reviews = () => {
           </a>
         </button>
       </div>
-      <ReviewList />
+
+      {/* Conditionally render based on isVisible state */}
+      {isVisible && <ReviewList reviews={reviews} />}
     </div>
   );
 };
