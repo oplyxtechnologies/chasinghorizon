@@ -13,7 +13,7 @@ const OtpVerifyPage = () => {
   const [resendTimer, setResendTimer] = useState(30);
   const [submitting, setSubmitting] = useState(false);
 
-  // Countdown logic
+  // Countdown for resend OTP
   useEffect(() => {
     if (resendTimer > 0) {
       const timer = setTimeout(() => setResendTimer((prev) => prev - 1), 1000);
@@ -21,16 +21,20 @@ const OtpVerifyPage = () => {
     }
   }, [resendTimer]);
 
+  // Handle OTP input
   const handleChange = (index: number, value: string) => {
     if (!/^[0-9]?$/.test(value)) return;
+
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
+
     if (value && index < OTP_LENGTH - 1) {
       inputsRef.current[index + 1]?.focus();
     }
   };
 
+  // Handle backspace navigation
   const handleKeyDown = (
     index: number,
     e: React.KeyboardEvent<HTMLInputElement>
@@ -43,6 +47,7 @@ const OtpVerifyPage = () => {
     }
   };
 
+  // Submit OTP
   const handleSubmit = async () => {
     const fullOtp = otp.join("");
     if (fullOtp.length !== OTP_LENGTH) return;
@@ -59,22 +64,40 @@ const OtpVerifyPage = () => {
 
       if (res.ok) {
         toast.success("OTP verified successfully!");
-        // router.push('/dashboard') if needed
+        // Optional: router.push('/dashboard');
       } else {
         toast.error(data.message || "Invalid OTP");
       }
-    } catch (err) {
+    } catch (error) {
+      if (process.env.NODE_ENV === "development") {
+        console.error("OTP verify error:", error);
+      }
       toast.error("Something went wrong. Please try again.");
     } finally {
       setSubmitting(false);
     }
   };
 
+  // Resend OTP
   const handleResend = async () => {
     if (resendTimer > 0) return;
     setResendTimer(30);
-    // Call backend to resend OTP
-    toast.message("OTP resent successfully.");
+
+    try {
+      const res = await fetch("/api/resend-otp", { method: "POST" });
+
+      if (res.ok) {
+        toast.message("OTP resent successfully.");
+      } else {
+        const data = await res.json();
+        toast.error(data.message || "Failed to resend OTP");
+      }
+    } catch (error) {
+      if (process.env.NODE_ENV === "development") {
+        console.error("OTP resend error:", error);
+      }
+      toast.error("Unable to resend OTP.");
+    }
   };
 
   return (

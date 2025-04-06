@@ -158,7 +158,7 @@ const LoginPage = () => {
                     key={id}
                     className="w-[95px] h-[54px] bg-primary rounded-lg flex items-center justify-center"
                   >
-                    <img src={icon} alt={alt} className="w-6 h-6" />
+                    <Image src={icon} alt={alt} className="w-6 h-6" />
                   </Button>
                 ))}
               </div>

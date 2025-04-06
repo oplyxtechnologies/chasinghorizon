@@ -6,7 +6,6 @@ import { Separator } from "@/components/ui/separator";
 import { Eye, EyeOff, Lock, Mails, User, Phone } from "lucide-react";
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 
 const RegisterPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -235,7 +234,7 @@ const RegisterPage = () => {
                     key={alt}
                     className="w-[95px] h-[54px] bg-primary flex justify-center items-center"
                   >
-                    <img src={icon} alt={alt} className="w-6 h-6" />
+                    <Image src={icon} alt={alt} className="w-6 h-6" />
                   </Button>
                 ))}
               </div>
