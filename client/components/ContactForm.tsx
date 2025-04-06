@@ -23,7 +23,7 @@ const ContactForm = () => {
   };
 
   return (
-    <section className="bg-gray-100 py-12 ">
+    <section className=" py-12 ">
       <div className="container mx-auto max-w-7xl px-4 md:px-8 lg:px-16">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Left Section - Contact Form */}
@@ -102,7 +102,7 @@ const ContactForm = () => {
             {/* Google Map Embed */}
             <div className="mt-6">
               <iframe
-                className="max-w-xl h-64 "
+                className="w-full h-64 "
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2381.6928308752556!2d-2.982384384708316!3d53.40837197999468!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487b214c8a89a1c7%3A0x1336dfc65a0e83f!2sLiverpool%2C%20UK!5e0!3m2!1sen!2s!4v1642162812332!5m2!1sen!2s"
                 allowFullScreen
                 loading="lazy"

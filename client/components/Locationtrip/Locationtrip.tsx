@@ -60,7 +60,7 @@ const destinations = [
 
 const Locationtrip = () => {
   return (
-    <div className="block max-w-7xl py-16 mx-auto space-y-6">
+    <div className="block max-w-7xl  py-16 mx-auto space-y-6">
       {/* Header Section */}
       <div className="grid grid-cols-2 px-4 w-full items-center">
         <div className="space-y-3">

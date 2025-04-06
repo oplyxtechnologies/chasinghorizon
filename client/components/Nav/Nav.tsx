@@ -73,13 +73,13 @@ const Nav: React.FC = () => {
         <div className="hidden w-full md:block md:w-auto">
           <ul className="font-medium flex flex-col md:flex-row md:space-x-8 gap-2 text-center">
             <Link
-              href="/auth"
+              href="auth/login"
               className="cursor-pointer border-2 border-gray-300 hover:bg-gray-300 p-2 px-4 rounded-full transition-all duratio-100"
             >
               Login
             </Link>
             <Link
-              href="/auth"
+              href="auth/register"
               className="cursor-pointer border-2 p-2 px-4 rounded-full border-primary hover:bg-[rgb(0,12,135)] hover:border-[#rgb(0,12,135)] bg-primary text-white transition-all duration-200"
             >
               SignUp

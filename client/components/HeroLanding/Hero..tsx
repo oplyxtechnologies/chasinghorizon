@@ -3,7 +3,7 @@ import React from "react";
 
 const Hero = () => {
   return (
-    <div className="relative w-full h-[90vh]">
+    <div className="relative w-full h-[90vh] font-emotional">
       {/* Background Image */}
       <Image
         src="/hero.jpg"
